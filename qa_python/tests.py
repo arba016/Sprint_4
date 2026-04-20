@@ -1,3 +1,5 @@
+import pytest
+
 from data import (
     BOOK_PRIDE_ZOMBIE,
     BOOK_LOTR,
@@ -8,8 +10,6 @@ from data import (
     BOOK_MOYDODYR,
     BOOK_LOVE,
     BOOK_TRACTOR,
-    BOOK_NAME_40,
-    BOOK_NAME_41,
     GENRE_COMEDY,
     GENRE_FANTASY,
     GENRE_HORROR,
@@ -44,17 +44,19 @@ class TestBooksCollector:
 
         assert len(collector.get_books_genre()) == 1
 
-    # 3 проверяем что если у книги 40 символ, то книга добавится в books_genre
-    def test_add_new_book_adds_book_with_40_chars(self, collector):
+    @pytest.mark.parametrize("name", ["a", "a" * 39, "a" * 40])
+    # 3 проверяем что если у книги валидное количество символов, то книга добавится в books_genre
+    def test_add_new_book_adds_book_with_valid_names(self, name, collector):
 
-        collector.add_new_book(BOOK_NAME_40)
+        collector.add_new_book(name)
 
         assert len(collector.get_books_genre()) == 1
 
-    # 4 проверяем что если у книги 41 символ, то книга не добавится в books_genre
-    def test_add_new_book_does_not_add_book_longer_than_40_chars(self, collector):
+    @pytest.mark.parametrize("name", ["", "a" * 41])
+    # 4 проверяем что если у книги невалидное количество символов, то книга не добавится в books_genre
+    def test_add_new_book_does_not_adds_book_with_invalid_names(self, name, collector):
 
-        collector.add_new_book(BOOK_NAME_41)
+        collector.add_new_book(name)
 
         assert len(collector.get_books_genre()) == 0
 
@@ -94,9 +96,7 @@ class TestBooksCollector:
         assert collector.get_book_genre(BOOK_TRACTOR) is None
 
     # 10 проверяем что выводятся книги с определенным жанром
-    def test_get_books_with_specific_genre_returns_correct_books(
-        self, add_books
-    ):
+    def test_get_books_with_specific_genre_returns_correct_books(self, add_books):
         add_books.set_book_genre(BOOK_LOTR, GENRE_FANTASY)
 
         assert add_books.get_books_with_specific_genre(GENRE_FANTASY) == [BOOK_LOTR]
@@ -109,9 +109,7 @@ class TestBooksCollector:
         assert add_books.get_book_genre(BOOK_FIXIKI) == ""
 
     # 12 проверяем что возвращаются книги подходящие детям
-    def test_get_books_for_children_returns_books_without_age_rating(
-        self, add_books
-    ):
+    def test_get_books_for_children_returns_books_without_age_rating(self, add_books):
 
         add_books.set_book_genre(BOOK_PRIDE_ZOMBIE, GENRE_COMEDY)
         add_books.set_book_genre(BOOK_LOTR, GENRE_FANTASY)
@@ -142,9 +140,7 @@ class TestBooksCollector:
         assert add_books.get_list_of_favorites_books() == [BOOK_SHREK]
 
     # 15 проверка того что книга удаляется из избранного
-    def test_delete_book_from_favorites_removes_book_from_favorites(
-        self, add_books
-    ):
+    def test_delete_book_from_favorites_removes_book_from_favorites(self, add_books):
 
         add_books.add_book_in_favorites(BOOK_SHREK)
         add_books.delete_book_from_favorites(BOOK_SHREK)

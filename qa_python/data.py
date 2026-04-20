@@ -14,6 +14,3 @@ GENRE_HORROR = "Ужасы"
 GENRE_DETECTIVE = "Детективы"
 GENRE_CARTOONS = "Мультфильмы"
 GENRE_INVALID = "Мелодрама"
-
-BOOK_NAME_40 = "a" * 40
-BOOK_NAME_41 = "a" * 41
