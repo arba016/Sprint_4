@@ -154,3 +154,22 @@ class TestBooksCollector:
         add_books.add_book_in_favorites(BOOK_SHREK)
 
         assert len(add_books.get_list_of_favorites_books()) == 1
+
+    # 17 проверка метода get_books_genre когда книги добавлены
+    def test_get_books_genre_returns_dict_with_added_books(self, add_books):
+
+        assert add_books.get_books_genre() == {
+            BOOK_PRIDE_ZOMBIE: "",
+            BOOK_LOTR: "",
+            BOOK_IT: "",
+            BOOK_INCEPTION: "",
+            BOOK_FIXIKI: "",
+            BOOK_MOYDODYR: "",
+            BOOK_LOVE: "",
+            BOOK_SHREK: "",
+        }
+
+    # 18 проверка метода get_books_genre когда книги не добавлены
+    def test_get_books_genre_returns_empty_dict_when_no_books_added(self, collector):
+
+        assert collector.get_books_genre() == {}
